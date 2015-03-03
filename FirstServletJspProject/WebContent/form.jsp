@@ -30,14 +30,14 @@
 		</table>
 			
 		<br /><br />Skad dowiedziales sie o konferencji? <br />
-		<input type="radio" name="source" value="job"/> Z ogloszenia w pracy <br />
-		<input type="radio" name="source" value="school"/> Z ogloszenia na uczelni <br />
-		<input type="radio" name="source" value="facebook"/> Z facebooka <br />
-		<input type="radio" name="source" value="friends"/> Od znajomych <br />
+		<input type="radio" name="source" value="Z ogloszenia w pracy "/> Z ogloszenia w pracy <br />
+		<input type="radio" name="source" value="Z ogloszenia na uczelni"/> Z ogloszenia na uczelni <br />
+		<input type="radio" name="source" value="Z facebooka"/> Z facebooka <br />
+		<input type="radio" name="source" value="Od znajomych"/> Od znajomych <br />
 		<input type="radio" name="source" value="others"/> Inne (jakie?) <input type="text" name="otherSource" /> <br />
 		
 		<br /><br />Czym sie zajmujesz? <br />
-		<textarea name="whatDoYouDo" rows=5 cols=20> </textarea><br />		
+		<textarea name="whatDoYouDo" rows=5 cols=20></textarea><br />		
 		<br /><input type="submit" name="submit" value="Przeslij" />
 		
 	</form>
