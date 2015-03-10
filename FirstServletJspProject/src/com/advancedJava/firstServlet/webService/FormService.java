@@ -1,6 +1,7 @@
 package com.advancedJava.firstServlet.webService;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -19,8 +20,10 @@ public class FormService extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 
 	
-	private int usersLimit = 5;
-	private String firstName, lastName, email, confEmail, employer, source, whatIsDoing;
+	private int usersLimit = 2;
+	private int alreadyListed = 0;
+	private ArrayList<Participant> users;
+	private String firstName="", lastName="", email="", confEmail="", employer="", source="", otherSource="", whatIsDoing="";
 	private Participant p;
 	private HttpSession session;
 	private ServletContext context;
@@ -36,6 +39,7 @@ public class FormService extends HttpServlet{
 	}
 	
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -46,8 +50,6 @@ public class FormService extends HttpServlet{
 		confEmail = req.getParameter("emailConf");
 		employer = req.getParameter("employer");
 		source = req.getParameter("source");
-		if(source.equals("others"))
-			source = req.getParameter("otherSource");
 		whatIsDoing = req.getParameter("whatDoYouDo");
 		
 		
@@ -59,6 +61,21 @@ public class FormService extends HttpServlet{
 			session = req.getSession();
 			context = req.getServletContext();
 			
+			if(context.getAttribute("count") == null) {
+				context.setAttribute("count", 0);
+			} 
+			else {
+				alreadyListed = (int) context.getAttribute("count");
+			}
+			
+			if(context.getAttribute("listOfUsers") == null) {
+				users = new ArrayList<Participant>();
+				context.setAttribute("listOfUsers", users);
+			}
+			else {
+				users = (ArrayList<Participant>) context.getAttribute("listOfUsers");
+			}
+			
 			
 			
 				// sprawdzam czy zostalo podane imie i nazwisko w formularzu. Jesli podczas
@@ -67,7 +84,9 @@ public class FormService extends HttpServlet{
 			if(isFilled()) {
 				if(!alreadySend(firstName,lastName)) {
 					if(email.equals(confEmail)) {
-						if(Participant.count<usersLimit) {
+						if(source.equals("others"))
+							source = req.getParameter("otherSource");
+						if(alreadyListed<usersLimit) {
 							p = new Participant();
 							p.setFirstName(firstName);
 							p.setLastName(lastName);
@@ -75,10 +94,13 @@ public class FormService extends HttpServlet{
 							p.setEmployer(employer);
 							p.setSource(source);
 							p.setWhatDoYouDo(whatIsDoing);
+							alreadyListed++;  // zwiekszam licznik w kontekscie
+							users.add(p);     // dodaje uzytkownika do listy w kontekscie
 							
 							session.setAttribute("name", firstName);
 							session.setAttribute("lastName", lastName);
-							context.setAttribute("count", Participant.count);	
+							context.setAttribute("count", alreadyListed);
+							context.setAttribute("listOfUsers", users);
 						}
 						else 
 							resp.sendRedirect("noSpace.jsp"); // jesli limit zostal wyczerpany nastepuje przekierowanie na odpowiednia strone

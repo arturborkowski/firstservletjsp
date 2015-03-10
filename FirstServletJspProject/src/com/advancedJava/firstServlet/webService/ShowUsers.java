@@ -2,7 +2,9 @@ package com.advancedJava.firstServlet.webService;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,27 +21,37 @@ public class ShowUsers extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private PrintWriter out;
-	private Participant part;
+	private ServletContext context;
+	private ArrayList<Participant> users = new ArrayList<Participant>();
 	
+	@SuppressWarnings("unchecked")
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		out = response.getWriter();
+		context = request.getServletContext();
 		
-		for(int i=0; i < Participant.count; i++) {
-			part = Participant.list[i];
-			if(part!=null){
-				out.println(
-						"<center>ID: " + (i+1)
-						+ "<br />Imie: " +part.getFirstName()
-						+ "<br />Nazwisko: " +part.getLastName()
-						+ "<br />Email: " +part.getEmail()
-						+ "<br />Pracodawca: " +part.getEmployer()
-						+ "<br />Zrodlo: " +part.getSource()
-						+ "<br />Czym sie zajmuje: <br />" +part.getWhatDoYouDo()
-						+ "<br /><br />");
+		
+		if(context.getAttribute("listOfUsers") != null) {
+			users = (ArrayList<Participant>) context.getAttribute("listOfUsers");
+			
+			for(Participant part: users) {
+					out.println(
+							"<center>ID: " + ((users.indexOf(part)+1))
+							+ "<br />Imie: " +part.getFirstName()
+							+ "<br />Nazwisko: " +part.getLastName()
+							+ "<br />Email: " +part.getEmail()
+							+ "<br />Pracodawca: " +part.getEmployer()
+							+ "<br />Zrodlo: " +part.getSource()
+							+ "<br />Czym sie zajmuje: <br />" +part.getWhatDoYouDo()
+							+ "<br /><br />");
+				
 			}
 		}
+		else {
+			out.println("<center><h2> The list is empty! </h2>");
+		}
 		
+		 
 		out.println("<br /><a href='form.jsp'>Powrot do formularza</a></center>");
 		
 		

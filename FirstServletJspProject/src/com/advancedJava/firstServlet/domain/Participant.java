@@ -2,8 +2,7 @@ package com.advancedJava.firstServlet.domain;
 
 public class Participant {
 
-	public static int count = 0;
-	public static Participant[] list = new Participant[5];
+
 	
 	String firstName;
 	String lastName;
@@ -13,11 +12,6 @@ public class Participant {
 	String whatDoYouDo;
 	
 	
-	
-	public Participant() {
-		Participant.list[count] = this;
-		Participant.count++;
-	}
 	
 	
 	
