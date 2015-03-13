@@ -4,12 +4,12 @@ public class Participant {
 
 
 	
-	String firstName;
-	String lastName;
-	String email;
-	String employer;
-	String source;
-	String whatDoYouDo;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String employer;
+	private String source;
+	private String whatDoYouDo;
 	
 	
 	
